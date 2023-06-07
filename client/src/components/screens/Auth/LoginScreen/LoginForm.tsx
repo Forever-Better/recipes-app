@@ -6,21 +6,24 @@ import { useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useActions } from '@/hooks/useActions';
+import { useTypedSelector } from '@/hooks/useTypedSelector';
 import { cn } from '@/lib/utils';
-import type { SignupData } from '@/services/auth/auth.helper';
+import type { SignupData } from '@/store/user/user.interface';
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
 
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+export function LoginForm({ className, ...props }: UserAuthFormProps) {
   const {
     formState: { errors, isDirty, isValid },
     handleSubmit,
     register
   } = useForm<SignupData>();
-  const isLoading = false;
+  const { isLoading } = useTypedSelector((state) => state.user);
+  const { login } = useActions();
 
   function onSubmit(data: SignupData) {
-    console.log(data);
+    login(data);
   }
 
   return (
@@ -28,9 +31,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='grid gap-2'>
           <div className='grid gap-1'>
-            {/* <Label className='sr-only' htmlFor='email'>
-              Email
-            </Label> */}
             <Input
               autoCapitalize='none'
               autoComplete='email'
@@ -39,7 +39,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               id='email'
               placeholder='name@example.com'
               type='email'
-              {...register('email', { minLength: { value: 8, message: 'Минимум 8 символов' }, required: true })}
+              {...register('email')}
             />
             {errors.email?.message && <span className='text-sm'>{errors.email.message}</span>}
             <Input
@@ -51,13 +51,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               id='password'
               placeholder='Password'
               type='password'
-              {...register('password', { minLength: { value: 6, message: 'Минимум 6 символов' }, required: true })}
+              {...register('password')}
             />
             {errors.password && <span className='text-sm text-muted-foreground'>{errors.password.message}</span>}
           </div>
           <Button disabled={isLoading || (isDirty && !isValid)}>
             {isLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
-            Sign In with Email
+            Login
           </Button>
         </div>
       </form>

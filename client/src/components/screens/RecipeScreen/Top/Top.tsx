@@ -1,11 +1,14 @@
-import { Bookmark, Printer } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { Printer } from 'lucide-react';
 import Image from 'next/image';
 
 import { DifficultPoint } from '@/components/Recipe/Recipe';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { BookmarkService } from '@/services/bookmark/bookmark.service';
 import type { Recipe } from '@/types/recipe.interface';
 
+import BookmarkButton from './BookmarkButton';
 import Share from './Share';
 
 interface TopProps {
@@ -15,11 +18,15 @@ interface TopProps {
     totalTime: Recipe['totalTime'];
     source: Recipe['source'];
     url: Recipe['url'];
+    uri: Recipe['uri'];
     ingredients: Recipe['ingredients'];
   };
 }
 
 export default function Top({ data }: TopProps) {
+  const recipeId = data.uri.split('recipe_')[1];
+  const { data: res } = useQuery(['find bookmark'], () => BookmarkService.findOne(recipeId));
+
   return (
     <Card className='p-0 relative'>
       <CardContent className='flex gap-4 w-full p-0'>
@@ -60,10 +67,7 @@ export default function Top({ data }: TopProps) {
             </div>
           </div>
           <div className='flex gap-3'>
-            <Button className='w-fit' variant='secondary'>
-              <Bookmark className='mr-2' size={18} />
-              Save
-            </Button>
+            <BookmarkButton hasBookmark={!!res?.id} recipeId={recipeId} />
             <Button className='w-fit' variant='outline'>
               <Printer className='mr-2' size={18} />
               Print

@@ -2,7 +2,7 @@ export const getContentType = () => ({
   'Content-Type': 'application/json'
 });
 
-export const ErrorCatch = (error: any): string => {
+export const errorCatch = (error: any): string => {
   const { message } = error.response.data.message;
 
   if (message) {

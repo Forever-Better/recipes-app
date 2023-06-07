@@ -1,6 +1,9 @@
 import { UrlTemplates } from '@/lib/urlTemplates';
 
 export const getPublicUrl = {
+  main() {
+    return UrlTemplates.Main;
+  },
   login() {
     return UrlTemplates.Login;
   },

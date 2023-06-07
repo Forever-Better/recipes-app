@@ -3,8 +3,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import img from '@/assets/dose-juice-sTPy-oeA3h0-unsplash.jpg';
-import { UserAuthForm } from '@/components/UserAuthForm';
+import { UserAuthForm } from '@/components/screens/Auth/SignupScreen/SignupForm';
 import { buttonVariants } from '@/components/ui/button';
+import { getPublicUrl } from '@/helpers/getPublicUrl';
 import { cn } from '@/lib/utils';
 
 export default function SignupScreen() {
@@ -29,7 +30,7 @@ export default function SignupScreen() {
       <div className='container relative hidden h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0'>
         <Link
           className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'absolute right-4 top-4 md:right-8 md:top-8')}
-          href='/examples/authentication'
+          href={getPublicUrl.login()}
         >
           Login
         </Link>

@@ -7,10 +7,10 @@ import Reviews from './Reviews/Reviews';
 import Top from './Top/Top';
 
 export default function RecipeScreen({ data }: { data: Recipe }) {
-  const { image, ingredients, label, source, totalTime, url } = data;
+  const { image, ingredients, label, source, totalTime, uri, url } = data;
   return (
     <>
-      <Top data={{ label, image, totalTime, source, url, ingredients }} />
+      <Top data={{ label, image, totalTime, source, url, ingredients, uri }} />
       <Body data={data} />
       <Separator className='my-8 ' />
       <AlsoRecipes category={data.healthLabels[0]} />
