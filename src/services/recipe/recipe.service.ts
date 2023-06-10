@@ -10,15 +10,23 @@ export const RecipeService = {
   //     nextUrl ||
   //       `${env.NEXT_PUBLIC_EDAMAM_API_URL}/?type=public&app_id=${env.NEXT_PUBLIC_EDAMAM_ID}&app_key=${
   //         env.NEXT_PUBLIC_EDAMAM_KEY
-  //       }${query ? `&q=${query}` : `&cuisineType=Eastern Europe`}&random=true`
+  //       }${query ? `&q=${query}` : '&random=true'}&imageSize=LARGE`
   //   );
 
   //   return response.json() as Promise<GetRecipesResponse>;
   // },
-  async getAll(query: string, nextUrl?: string) {
+  async prefetch(query: string) {
     const { data } = await edamamInstance<GetRecipesResponse>({
       method: 'GET',
-      params: query ? { q: query } : { cuisineType: 'Eastern Europe', random: 'true' },
+      params: query ? { q: query, imageSize: 'LARGE' } : { imageSize: 'LARGE' }
+    });
+    return data;
+  },
+  async getAll(query: string, nextUrl?: string) {
+    console.log(query, nextUrl);
+    const { data } = await edamamInstance<GetRecipesResponse>({
+      method: 'GET',
+      params: query ? { q: query, imageSize: 'LARGE' } : { imageSize: 'LARGE' },
       url: nextUrl
     });
     return data;
@@ -34,8 +42,8 @@ export const RecipeService = {
   async getSimilar(category: string) {
     const health = category.split(' ').join('-').toLowerCase();
     const response = await fetch(
-      `${env.NEXT_PUBLIC_EDAMAM_API_URL}/?type=public&app_id=${env.NEXT_PUBLIC_EDAMAM_ID}&app_key=${env.NEXT_PUBLIC_EDAMAM_KEY}&health=${health}&random=true`,
-      { next: { revalidate: 20 } }
+      `${env.NEXT_PUBLIC_EDAMAM_API_URL}/?type=public&app_id=${env.NEXT_PUBLIC_EDAMAM_ID}&app_key=${env.NEXT_PUBLIC_EDAMAM_KEY}&health=${health}&imageSize=LARGE&random=true`,
+      { next: { revalidate: 2000 } }
     );
 
     return response.json();

@@ -14,6 +14,11 @@ interface Images {
     width: number;
     height: number;
   };
+  LARGE: {
+    url: string;
+    width: number;
+    height: number;
+  };
 }
 
 interface Ingredient {

@@ -52,6 +52,7 @@ model User {
   sessions      Session[]
   bookmarks     Bookmark[]
   reviews       Review[]
+  ratings       Rating[]
 
   @@map(name: "users")
 }
@@ -80,7 +81,6 @@ model Review {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @map(name: "updated_at")
 
-  rating    Int
   body      String?
 
   recipeId  String
@@ -88,4 +88,17 @@ model Review {
   userId    String
 
   @@map(name: "reviews")
+}
+
+model Rating {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+
+  value     Int
+
+  recipeId  String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+
+  @@map(name: "ratings")
 }

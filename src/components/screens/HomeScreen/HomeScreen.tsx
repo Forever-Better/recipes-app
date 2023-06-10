@@ -1,15 +1,26 @@
+import { Suspense } from 'react';
+
+import type { GetRecipesResponse } from '@/services/recipe/recipe.helper';
+
 import FilterBar from './FilterBar';
 import HeaderBlock from './HeaderBlock';
 import RecipeList from './RecipeList';
+import RecipeListSkeleton from './RecipeListSkeleton';
 import Search from './Search';
 
-export default function HomeScreen() {
+interface HomeScreenProps {
+  initialRecipeList: GetRecipesResponse;
+}
+
+export default function HomeScreen({ initialRecipeList }: HomeScreenProps) {
   return (
     <>
       <HeaderBlock />
       <FilterBar />
       <Search />
-      <RecipeList />
+      <Suspense fallback={<RecipeListSkeleton />}>
+        <RecipeList initialData={initialRecipeList} />
+      </Suspense>
     </>
   );
 }

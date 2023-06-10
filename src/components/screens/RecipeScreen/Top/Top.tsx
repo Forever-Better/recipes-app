@@ -1,11 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
 import { Printer } from 'lucide-react';
 import Image from 'next/image';
 
-import { DifficultPoint } from '@/components/Recipe/Recipe';
+import DifficultyIndicator from '@/components/DifficultyIndicator';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { BookmarkService } from '@/services/bookmark/bookmark.service';
+import { cn } from '@/lib/utils';
 import type { Recipe } from '@/types/recipe.interface';
 
 import BookmarkButton from './BookmarkButton';
@@ -22,9 +21,10 @@ interface TopProps {
     ingredients: Recipe['ingredients'];
   };
   hasBookmark: boolean;
+  rating: { averageRating: number; countRatings: number };
 }
 
-export default function Top({ data, hasBookmark }: TopProps) {
+export default function Top({ data, hasBookmark, rating }: TopProps) {
   const recipeId = data.uri.split('recipe_')[1];
 
   return (
@@ -35,17 +35,34 @@ export default function Top({ data, hasBookmark }: TopProps) {
             priority
             alt='Cover'
             className='rounded-l-md'
-            height={300}
+            height={320}
             quality={100}
             sizes='100vw'
             src={data.image}
-            style={{ width: '100%', objectFit: 'cover', height: '300px' }}
+            style={{ width: '100%', objectFit: 'cover', height: '320px' }}
             width={0}
           />
         </div>
         <div className='flex flex-col p-6 justify-between w-3/5'>
           <div>
-            <h1 className='text-3xl mb-3 max-w-[90%]'>{data.label}</h1>
+            <h1 className='text-3xl mb-2 max-w-[90%]'>{data.label}</h1>
+            <div className='flex gap-2 items-center mb-3'>
+              <span
+                className={cn(
+                  rating.averageRating >= 7
+                    ? 'bg-green-600'
+                    : rating.averageRating === 0
+                    ? 'bg-transparent border !text-black'
+                    : rating.averageRating <= 4
+                    ? 'bg-red-600'
+                    : 'bg-gray-500',
+                  'flex text-sm justify-center items-center h-6 w-9 font-medium text-white rounded-md'
+                )}
+              >
+                {rating.averageRating || '–'}
+              </span>
+              <span className='text-sm text-gray-500'>{rating.countRatings} ratings</span>
+            </div>
             <div className='flex gap-2'>
               <div className='flex text-xs flex-col transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted border py-2 px-4 rounded-lg'>
                 <div className='flex text-gray-500 gap-1 items-center'>
@@ -57,12 +74,7 @@ export default function Top({ data, hasBookmark }: TopProps) {
                 <div className='text-gray-500 flex gap-1 items-center'>
                   <span className='text-xs'>Difficulty</span>
                 </div>
-                <div className='flex gap-[3px] mt-2'>
-                  <DifficultPoint active className='!w-2 !h-2' />
-                  <DifficultPoint active={data.ingredients?.length > 4} className='!w-2 !h-2' />
-                  <DifficultPoint active={data.ingredients.length > 8} className='!w-2 !h-2' />
-                  <DifficultPoint active={data.ingredients.length > 12} className='!w-2 !h-2' />
-                </div>
+                <DifficultyIndicator ingredientsLength={data.ingredients.length} />
               </div>
             </div>
           </div>
@@ -72,7 +84,6 @@ export default function Top({ data, hasBookmark }: TopProps) {
               <Printer className='mr-2' size={18} />
               Print
             </Button>
-
             <Share data={{ image: data.image, label: data.label }} />
           </div>
         </div>

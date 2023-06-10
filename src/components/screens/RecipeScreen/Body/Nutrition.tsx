@@ -22,8 +22,8 @@ export default function Nutrition({ data }: { data: Recipe }) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.digest.map(({ daily, label, total, unit }) => (
-                <TableRow>
+              {data.digest.map(({ daily, label, total, unit }, i) => (
+                <TableRow key={i}>
                   <TableCell className='font-medium'>{label}</TableCell>
                   <TableCell>
                     {Math.ceil(total)}

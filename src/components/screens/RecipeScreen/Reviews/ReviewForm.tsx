@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import TextareaAutosize from 'react-textarea-autosize';
 import type * as z from 'zod';
 
-import StarRating from '@/components/StarRating';
 import { UserAvatar } from '@/components/UserAvatar';
 import { Button } from '@/components/ui/button';
 import { reviewCreateSchema } from '@/lib/validations/review';
@@ -22,16 +21,20 @@ export default function ReviewForm({ close }: ReviewFormProps) {
   const { data } = useSession();
   const router = useRouter();
   const pathname = usePathname();
-  const [rating, setRating] = useState(0);
+
   const [isSaving, setIsSaving] = useState(false);
-  const { handleSubmit } = useForm<FormData>({
+  const {
+    formState: { isValid },
+    handleSubmit,
+    register
+  } = useForm<FormData>({
     resolver: zodResolver(reviewCreateSchema)
   });
 
   async function onSubmit(data: FormData) {
     setIsSaving(true);
 
-    const response = await ReviewService.create({ rating, body: data.body }, pathname?.split('recipe/')[1] as string);
+    const response = await ReviewService.create({ body: data.body }, pathname?.split('recipe/')[1] as string);
 
     if (response.ok) {
       setIsSaving(false);
@@ -45,16 +48,12 @@ export default function ReviewForm({ close }: ReviewFormProps) {
       <div className='flex gap-4 pb-6 border-b'>
         <UserAvatar className='w-8 h-8' user={{ image: data?.user.image || null, name: data?.user.name || null }} />
         <div className='w-full flex flex-col gap-4'>
-          <div className='flex flex-col gap-1'>
-            <span className='text-gray-500 text-sm'>Your mark: *</span>
-            <StarRating rating={rating} setRating={setRating} />
-          </div>
-          <div className='flex flex-col gap-1'>
-            <span className='text-gray-500 text-sm'>Your review:</span>
-            <TextareaAutosize className='flex h-16 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium resize-none placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50' />
-          </div>
+          <TextareaAutosize
+            className='flex h-16 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium resize-none placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+            {...register('body', { required: true })}
+          />
           <div className='flex gap-2 justify-end'>
-            <Button className='w-fit' disabled={!rating} loading={isSaving} size='sm' type='submit'>
+            <Button className='w-fit' disabled={!isValid} loading={isSaving} size='sm' type='submit'>
               Publish
             </Button>{' '}
             <Button className='w-fit' disabled={isSaving} variant='ghost' onClick={close}>

@@ -13,15 +13,25 @@ export const ReviewService = {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        body: data.body,
-        rating: data.rating
+        body: data.body
       })
+    });
+
+    return response;
+  },
+  async delete(recipeId: string) {
+    const response = await fetch(getApiUrl.deleteReview(recipeId), {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
 
     return response;
   },
   async getAll(recipeId: string) {
     const response = await fetch(`${env.NEXT_PUBLIC_APP_URL}${getApiUrl.review(recipeId)}`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       }

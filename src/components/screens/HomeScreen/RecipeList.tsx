@@ -3,25 +3,33 @@
 'use client';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import Recipe from '@/components/Recipe/Recipe';
+import type { GetRecipesResponse } from '@/services/recipe/recipe.helper';
 import { RecipeService } from '@/services/recipe/recipe.service';
 
-export default function RecipeList() {
-  // const [recipeList, setRecipeList] = useState<GetRecipesResponse['hits']>();
+import RecipeListSkeleton from './RecipeListSkeleton';
+
+interface RecipeListProps {
+  initialData: GetRecipesResponse;
+}
+
+export default function RecipeList({ initialData }: RecipeListProps) {
   const searchParams = useSearchParams();
-  const query = searchParams?.get('q') ?? '';
+  const query = searchParams?.get('q') ?? 'banana';
   const router = useRouter();
 
   const { data, fetchNextPage, isFetching, isFetchingNextPage, isLoading, refetch } = useInfiniteQuery(
     ['recipes'],
-    ({ pageParam }) => RecipeService.getAll(query, pageParam),
+    ({ pageParam = 1 }) => RecipeService.getAll(query, pageParam),
     {
       getNextPageParam: (lastPage) => lastPage._links.next?.href,
-      refetchOnWindowFocus: false
+      refetchOnWindowFocus: false,
+      initialData: { pages: [initialData], pageParams: [1] }
     }
   );
 
@@ -42,20 +50,21 @@ export default function RecipeList() {
     }
   }, [query, refetch, router]);
 
-  if (isLoading || (isFetching && !isFetchingNextPage))
-    return <div className='flex h-96 items-center justify-center'>loading ...</div>;
-
   if (!data) return null;
 
   return (
     <>
       <div className='text-gray-600 text-sm mb-6'>
         {data.pages[0].count >= 10000 ? `More than ${data.pages[0].count}` : data.pages[0].count} recipes
-      </div>
+      </div>{' '}
       <ul className='recipe-grid'>
         {data.pages.map(({ hits }) => hits.map(({ recipe }) => <Recipe key={recipe.url} data={recipe} />))}
       </ul>
-      {isFetchingNextPage && <div className='flex justify-center my-6'>загрузка...</div>}
+      {isFetchingNextPage && (
+        <div className='flex justify-center my-6'>
+          <Loader2 className='mr-2 h-8 w-8 animate-spin text-primary' />
+        </div>
+      )}
       {data && !isLoading && <div ref={ref} />}
     </>
   );

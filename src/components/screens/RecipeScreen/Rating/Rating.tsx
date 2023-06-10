@@ -1,11 +1,19 @@
-import type { Prisma } from '@prisma/client';
-import { Star } from 'lucide-react';
+'use client';
 
+import clsx from 'clsx';
+import { Star } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+
+import StarRating from '@/components/StarRating';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { UrlTemplates } from '@/lib/urlTemplates';
+import type { GetRecipeRatingResponse } from '@/services/rating/rating.helper';
+import { RatingService } from '@/services/rating/rating.service';
 
 interface RatingProps {
-  data: Prisma.ReviewGetPayload<{ include: { user: true } }>[];
+  data: GetRecipeRatingResponse;
 }
 
 function RatingItem({
@@ -32,28 +40,77 @@ function RatingItem({
 }
 
 export default function Rating({ data }: RatingProps) {
+  const pathname = usePathname();
+  const recipeId = pathname?.split(`${UrlTemplates.Recipe}/`)[1] as string;
+  const [selectValue, setSelectValue] = useState(0);
+  const [yourRating, setYourRating] = useState(data.userRating);
+
+  async function patchRating(rating: number) {
+    setYourRating(rating);
+
+    const res = await RatingService.create(rating, recipeId);
+  }
+  async function deleteRating() {
+    await RatingService.delete(recipeId);
+  }
+
   return (
     <Card className='w-2/5 h-fit'>
       <CardHeader>
         <CardTitle>Rating</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className='flex items-center gap-2 mb-6'>
-          <div className='flex gap-1'>
-            <Star className='fill-secondary text-secondary' size={20} />
-            <Star className='fill-secondary text-secondary' size={20} />
-            <Star className='fill-secondary text-secondary' size={20} />
-            <Star className='fill-secondary text-secondary' size={20} />
-            <Star className='text-secondary' size={20} />
+        <div className='flex justify-between items-start gap-2 mb-6'>
+          <StarRating
+            rating={data.averageRating}
+            selectValue={selectValue}
+            setValue={(index) => {
+              setSelectValue(index);
+              patchRating(index);
+            }}
+          />
+          <div>
+            <div
+              className={clsx(
+                data.averageRating >= 7
+                  ? 'text-green-600'
+                  : data.averageRating === 0
+                  ? 'text-black'
+                  : data.averageRating <= 4
+                  ? 'text-red-600'
+                  : 'text-gray-500',
+                'text-3xl  font-medium'
+              )}
+            >
+              {data.averageRating || '–'}
+            </div>
+            <span className='text-sm text-gray-400 font-light'>{data.count} ratings</span>
           </div>
-          <span className='ml-2 text-gray-400'>161 reviews</span>
         </div>
-        <div className='flex flex-col gap-2'>
-          <RatingItem placeholder={5} reviewsCount={12} value={66} />
-          <RatingItem placeholder={4} reviewsCount={3} value={8} />
-          <RatingItem placeholder={3} reviewsCount={2} value={6} />
-          <RatingItem placeholder={2} reviewsCount={0} value={0} />
-          <RatingItem placeholder={1} reviewsCount={1} value={2} />
+        <div className='flex justify-between'>
+          {yourRating ? (
+            <div className='flex items-center gap-2'>
+              <span className='text-sm'>Your rating</span>
+              <span
+                className={clsx(
+                  yourRating >= 7 ? 'bg-green-600' : yourRating <= 4 ? 'bg-red-600' : 'bg-gray-500',
+                  'flex items-center font-medium justify-center text-white w-9 h-9 rounded-full'
+                )}
+              >
+                {yourRating}
+              </span>
+              <button
+                className='ml-2 text-gray-400 text-sm'
+                onClick={() => {
+                  setSelectValue(0);
+                  setYourRating(0);
+                  deleteRating();
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          ) : null}
         </div>
       </CardContent>
     </Card>

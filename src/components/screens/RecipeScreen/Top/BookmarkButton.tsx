@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { getApiUrl } from '@/helpers/getApiUrl';
 
 interface BookmarkButtonProps {
@@ -40,14 +41,21 @@ export default function BookmarkButton({ hasBookmark, recipeId }: BookmarkButton
   }
 
   return (
-    <Button
-      className='w-fit'
-      loading={isLoading}
-      startIcon={hasBookmark ? <Check className='mr-2' size={18} /> : <Bookmark className='mr-2' size={18} />}
-      variant={hasBookmark ? 'outline' : 'secondary'}
-      onClick={() => onClick()}
-    >
-      {hasBookmark ? 'Added' : 'Save'}
-    </Button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            className='w-fit'
+            loading={isLoading}
+            startIcon={hasBookmark ? <Check className='mr-2' size={18} /> : <Bookmark className='mr-2' size={18} />}
+            variant={hasBookmark ? 'outline' : 'secondary'}
+            onClick={() => onClick()}
+          >
+            {hasBookmark ? 'Added' : 'Save'}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>{hasBookmark ? 'Remove from bookmarks' : 'Save to bookmarks'}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }

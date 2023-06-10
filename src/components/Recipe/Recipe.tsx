@@ -1,22 +1,10 @@
-import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { getPublicUrl } from '@/helpers/getPublicUrl';
 import type { Recipe as IRecipe } from '@/types/recipe.interface';
 
-export function DifficultPoint({ active, className }: { active?: boolean; className?: string }) {
-  return (
-    <span
-      className={clsx(
-        'rounded-full inline-block',
-        `h-[10px] w-[10px]`,
-        active ? 'bg-secondary' : 'border-2',
-        className
-      )}
-    />
-  );
-}
+import DifficultyIndicator from '../DifficultyIndicator';
 
 export default function Recipe({ data }: { data: IRecipe }) {
   return (
@@ -28,7 +16,7 @@ export default function Recipe({ data }: { data: IRecipe }) {
             alt='Cover'
             className='recipe-image hover:scale-110'
             height={224}
-            src={data.image}
+            src={data.images.LARGE?.url || data.image}
             width={224}
           />
         </div>
@@ -47,12 +35,7 @@ export default function Recipe({ data }: { data: IRecipe }) {
             </div>
             <div className=''>
               <div className='text-sm text-gray-500'>Difficulty</div>
-              <div className='flex gap-[3px] mt-2'>
-                <DifficultPoint active />
-                <DifficultPoint active={data.ingredients?.length > 4} />
-                <DifficultPoint active={data.ingredients.length > 8} />
-                <DifficultPoint active={data.ingredients.length > 12} />
-              </div>
+              <DifficultyIndicator ingredientsLength={data.ingredients.length} />
             </div>
           </div>
         </div>

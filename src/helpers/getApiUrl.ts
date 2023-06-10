@@ -20,5 +20,11 @@ export const getApiUrl = {
   },
   review(recipeId: string) {
     return `${prefix}${ApiUrlTemplates.Recipe}/${recipeId}/reviews`;
+  },
+  deleteReview(reviewId: string) {
+    return `${prefix}${ApiUrlTemplates.Recipe}/any/reviews/${reviewId}`;
+  },
+  rating(recipeId: string) {
+    return `${prefix}${ApiUrlTemplates.Recipe}/${recipeId}/rating`;
   }
 };

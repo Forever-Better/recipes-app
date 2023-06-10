@@ -49,7 +49,7 @@ export default function Ingredients({ data }: IngredientsProps) {
                 <span>{capitalizeFirstLetter(food)}</span>
               </div>
               <div className='flex gap-1 text-gray-500 text-sm'>
-                <span>{Math.ceil(quantity)}</span>
+                <span>{Math.ceil(quantity) || 'by taste'}</span>
                 <span>{measure}</span>
               </div>
             </li>

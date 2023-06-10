@@ -10,7 +10,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ReviewForm from './ReviewForm';
 import ReviewItem from './ReviewItem';
 
-export default function Reviews({ data }: { data: Prisma.ReviewGetPayload<{ include: { user: true } }>[] }) {
+interface ReviewsProps {
+  data: Prisma.ReviewGetPayload<{ include: { user: true } }>[];
+}
+
+export default function Reviews({ data }: ReviewsProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -25,17 +29,18 @@ export default function Reviews({ data }: { data: Prisma.ReviewGetPayload<{ incl
       </CardHeader>
       <CardContent className='flex flex-col gap-8'>
         {isOpen && <ReviewForm close={() => setIsOpen(false)} />}
-        <ul className='w-full -mt-3'>
-          {data.length &&
-            data?.map((item, i) => (
-              <li
-                key={i}
-                className='border-b py-3 last:border-b-0 transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted'
-              >
-                <ReviewItem data={item}>{item.body}</ReviewItem>
-              </li>
-            ))}
-        </ul>
+        {data.length ? (
+          <ul className='w-full -mt-3'>
+            {data.length &&
+              data?.map((item, i) => (
+                <li key={i} className='border-b py-3 last:border-b-0'>
+                  <ReviewItem data={item}>{item.body}</ReviewItem>
+                </li>
+              ))}
+          </ul>
+        ) : (
+          <span className='text-gray-500'>No reviews yet, be the first</span>
+        )}
       </CardContent>
     </Card>
   );

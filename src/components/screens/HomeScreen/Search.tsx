@@ -6,7 +6,7 @@ import { getPublicUrl } from '@/helpers/getPublicUrl';
 
 export default function Search() {
   const searchParams = useSearchParams();
-  const query = searchParams.get('q') ?? '';
+  const query = searchParams?.get('q') ?? '';
   const router = useRouter();
 
   return (

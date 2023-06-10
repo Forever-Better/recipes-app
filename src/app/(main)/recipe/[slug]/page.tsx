@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import getRecipeRating from '@/actions/getRecipeRating';
 import RecipeScreen from '@/components/screens/RecipeScreen/RecipeScreen';
 import { db } from '@/lib/db';
 import { getCurrentUser } from '@/lib/session';
@@ -18,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { recipe } = await RecipeService.getOne(slug);
 
   return {
-    title: recipe.label,
+    title: `${recipe.label} - Recipes App`,
     openGraph: {
       images: [recipe.image]
     }
@@ -29,13 +30,20 @@ export default async function RecipePage({ params }: Props) {
   const user = await getCurrentUser();
 
   const { recipe } = await RecipeService.getOne(params.slug);
-
-  const hasBookmark = await db.bookmark.findFirst({ where: { userId: user?.id, recipeId: params.slug } });
-
   if (!recipe) return notFound();
 
+  const hasBookmark = await db.bookmark.findFirst({ where: { userId: user?.id, recipeId: params.slug } });
   const alsoRecipes = await RecipeService.getSimilar(recipe.healthLabels[0]);
   const { reviews } = await ReviewService.getAll(params.slug);
+  const rating = await getRecipeRating(params.slug);
 
-  return <RecipeScreen alsoRecipes={alsoRecipes} data={recipe} hasBookmark={!!hasBookmark} reviews={reviews} />;
+  return (
+    <RecipeScreen
+      alsoRecipes={alsoRecipes}
+      data={recipe}
+      hasBookmark={!!hasBookmark}
+      rating={rating}
+      reviews={reviews}
+    />
+  );
 }
