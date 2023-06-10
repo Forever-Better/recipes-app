@@ -10,7 +10,7 @@ export default function Recipe({ data }: { data: IRecipe }) {
   return (
     <div className='recipe'>
       <Link className='rounded-2xl inline-flex flex-col' href={getPublicUrl.recipe(data.uri.split('recipe_')[1])}>
-        <div className='rounded-xl overflow-hidden relative aspect-square'>
+        <div className='rounded-xl overflow-hidden relative'>
           <Image
             priority
             alt='Cover'

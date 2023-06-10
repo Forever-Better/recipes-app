@@ -1,7 +1,7 @@
 'use client';
 
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -13,6 +13,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 
 export default function AlsoRecipes({ data }: { data: GetRecipesResponse }) {
+  const [init, setInit] = useState();
   const navigationPrevRef = useRef(null);
   const navigationNextRef = useRef(null);
 
@@ -30,11 +31,25 @@ export default function AlsoRecipes({ data }: { data: GetRecipesResponse }) {
         </div>
       </div>
       <Swiper
-        className='flex'
         modules={[Navigation]}
         navigation={{ prevEl: navigationPrevRef.current, nextEl: navigationNextRef.current }}
-        slidesPerView={5}
+        slidesPerView={1}
         spaceBetween={24}
+        breakpoints={{
+          400: {
+            slidesPerView: 2
+          },
+          640: {
+            slidesPerView: 3
+          },
+          768: {
+            slidesPerView: 4
+          },
+          1024: {
+            slidesPerView: 5
+          }
+        }}
+        onInit={() => setInit(true)}
       >
         {data?.hits?.map(({ recipe }, i) => (
           <SwiperSlide key={i}>

@@ -5,6 +5,7 @@ export const useMediaQuery = (query: string) => {
 
   useEffect(() => {
     const matchQueryList = window.matchMedia(query);
+
     function handleChange(e: any) {
       setMatches(e.matches);
     }
