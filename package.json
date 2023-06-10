@@ -6,8 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint src --max-warnings 0",
-    "format": "prettier --write **/*.{ts,tsx,scss}"
+    "lint": "next lint",
+    "format": "prettier --write **/*.{ts,tsx,scss}",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.1.0",
