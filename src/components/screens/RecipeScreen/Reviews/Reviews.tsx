@@ -18,7 +18,7 @@ export default function Reviews({ data }: ReviewsProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Card className='w-3/5 h-fit'>
+    <Card className='h-fit'>
       <CardHeader className='flex flex-row justify-between'>
         <CardTitle>Reviews</CardTitle>{' '}
         {!isOpen && (

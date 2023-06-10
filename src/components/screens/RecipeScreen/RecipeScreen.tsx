@@ -32,7 +32,7 @@ export default function RecipeScreen({ alsoRecipes, data, hasBookmark, rating, r
       <Separator className='my-8 bg-transparent border-b border-dashed' />
       <AlsoRecipes data={alsoRecipes} />
       <Separator className='my-8 bg-transparent border-b border-dashed' />
-      <div className='flex gap-8'>
+      <div className='grid grid-cols-1 lg:grid-cols-[2fr,3fr] gap-8'>
         <Rating data={rating} />
         <Reviews data={reviews} />
       </div>

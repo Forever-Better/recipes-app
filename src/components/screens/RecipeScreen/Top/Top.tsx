@@ -29,12 +29,12 @@ export default function Top({ data, hasBookmark, rating }: TopProps) {
 
   return (
     <Card className='p-0 relative'>
-      <CardContent className='flex gap-4 w-full p-0'>
-        <div className='w-2/5'>
+      <CardContent className='grid sm:grid-cols-1 lg:grid-cols-[2fr,3fr] gap-4 w-full p-0'>
+        <div>
           <Image
             priority
             alt='Cover'
-            className='rounded-l-md'
+            className='rounded-l-md sm:w-full'
             height={320}
             quality={100}
             sizes='100vw'
@@ -43,7 +43,7 @@ export default function Top({ data, hasBookmark, rating }: TopProps) {
             width={0}
           />
         </div>
-        <div className='flex flex-col p-6 justify-between w-3/5'>
+        <div className='flex flex-col pt-0 p-6 lg:pt-6  justify-between'>
           <div>
             <h1 className='text-3xl mb-2 max-w-[90%]'>{data.label}</h1>
             <div className='flex gap-2 items-center mb-3'>

@@ -55,12 +55,12 @@ export default function Rating({ data }: RatingProps) {
   }
 
   return (
-    <Card className='w-2/5 h-fit'>
+    <Card className='h-fit'>
       <CardHeader>
         <CardTitle>Rating</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className='flex justify-between items-start gap-2 mb-6'>
+        <div className='sm:flex justify-between items-start gap-2 mb-6'>
           <StarRating
             rating={data.averageRating}
             selectValue={selectValue}
