@@ -13,7 +13,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 
 export default function AlsoRecipes({ data }: { data: GetRecipesResponse }) {
-  const [init, setInit] = useState();
+  const [init, setInit] = useState(false);
   const navigationPrevRef = useRef(null);
   const navigationNextRef = useRef(null);
 
