@@ -21,6 +21,7 @@ export default function Header({ user }: { user?: Pick<IUser, 'name' | 'image' |
           </Link>
         </div>
         <div className='flex gap-4 items-center'>
+          <ThemeToggle />
           {user?.email ? (
             <UserAccountNav user={user} />
           ) : (
@@ -28,7 +29,6 @@ export default function Header({ user }: { user?: Pick<IUser, 'name' | 'image' |
               <Button variant='secondary'>Signup</Button>
             </Link>
           )}
-          <ThemeToggle />
         </div>
       </div>
     </header>
