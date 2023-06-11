@@ -20,7 +20,7 @@ export default function StarRating({ rating, selectValue, setValue }: StarRating
   function getClass(type: 'hover' | 'rating' | 'selectValue') {
     if (type === 'rating') return 'fill-yellow-500 text-transparent';
 
-    return 'fill-gray-800';
+    return 'fill-gray-800 dark:fill-gray-200';
   }
   return (
     <div className='flex flex-wrap'>
@@ -49,12 +49,17 @@ export default function StarRating({ rating, selectValue, setValue }: StarRating
               className={clsx(
                 index <= (hover || selectValue || rating)
                   ? getClass(hover ? 'hover' : selectValue ? 'selectValue' : 'rating')
-                  : 'fill-slate-300',
+                  : 'fill-slate-300 dark:fill-slate-600',
                 'text-transparent'
               )}
             />
             <span
-              className={clsx(index <= (hover || selectValue || rating) ? 'text-gray-400' : 'text-gray-300', 'text-sm')}
+              className={clsx(
+                index <= (hover || selectValue || rating)
+                  ? 'text-gray-400 dark:text-gray-300'
+                  : 'text-gray-300 dark:text-gray-400',
+                'text-sm'
+              )}
             >
               {index}
             </span>

@@ -4,7 +4,7 @@ export default function RecipeListSkeleton() {
   return (
     <ul className='recipe-grid'>
       {Array.from({ length: 20 }).map((_, i) => (
-        <div key={i} className='bg-white '>
+        <div key={i} className='bg-transparent'>
           <Skeleton className='w-full rounded-xl h-56' />
           <div className='flex flex-col'>
             <div className='mt-3 h-10'>

@@ -1,17 +1,55 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { SearchIcon } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-import { getPublicUrl } from '@/helpers/getPublicUrl';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
-export default function Search() {
-  const searchParams = useSearchParams();
-  const query = searchParams?.get('q') ?? '';
+interface SearchProps {
+  searchParams: { q: string };
+}
+
+export default function Search({ searchParams }: SearchProps) {
+  const [query, setQuery] = useState(searchParams.q ?? '');
+
   const router = useRouter();
+  const pathname = usePathname();
+
+  const updateSearchParams = (query: string) => {
+    const searchParams = new URLSearchParams(window.location.search);
+
+    if (query) {
+      searchParams.set('q', query);
+    } else {
+      searchParams.delete('q');
+    }
+
+    const newPathname = `${pathname}?${searchParams.toString()}`;
+
+    router.push(newPathname);
+  };
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    updateSearchParams(query?.toLowerCase());
+  };
 
   return (
-    <div className='mb-6'>
-      {/* <Search defaultValue={query} onSearch={(search) => router.push(getPublicUrl.recipesQuery(search))} /> */}
-    </div>
+    <form onSubmit={handleSearch}>
+      <div className='relative'>
+        <Input
+          className='bg-transparent'
+          placeholder='Search recipes'
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <Button className='absolute top-0 right-0' type='submit' variant='ghost'>
+          <SearchIcon />
+        </Button>
+      </div>
+    </form>
   );
 }

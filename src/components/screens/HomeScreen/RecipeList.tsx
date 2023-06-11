@@ -22,15 +22,12 @@ interface RecipeListProps {
 export default function RecipeList({ initialData, searchParams }: RecipeListProps) {
   const router = useRouter();
 
-  const { data, fetchNextPage, isFetching, isFetchingNextPage, isLoading, refetch, remove } = useInfiniteQuery(
-    ['recipes'],
-    ({ pageParam = 1 }) => RecipeService.getAll(searchParams.q, pageParam),
-    {
+  const { data, fetchNextPage, isInitialLoading, isFetchingNextPage, isLoading, isRefetching, refetch, remove } =
+    useInfiniteQuery(['recipes'], ({ pageParam = 1 }) => RecipeService.getAll(searchParams.q, pageParam), {
       getNextPageParam: (lastPage) => lastPage._links.next?.href,
       refetchOnWindowFocus: false,
       initialData: { pages: [initialData], pageParams: [1] }
-    }
-  );
+    });
 
   const { inView, ref } = useInView({
     threshold: 0.5
@@ -56,7 +53,7 @@ export default function RecipeList({ initialData, searchParams }: RecipeListProp
       <div className='text-gray-500 text-sm mb-6'>
         {data.pages[0].count >= 10000 ? `More than ${data.pages[0].count}` : data.pages[0].count} recipes
       </div>{' '}
-      {isFetching && !isFetchingNextPage ? (
+      {!isFetchingNextPage ? (
         <RecipeListSkeleton />
       ) : (
         <ul className='recipe-grid'>

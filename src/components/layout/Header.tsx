@@ -4,13 +4,12 @@ import type { User as IUser } from 'next-auth';
 
 import { getPublicUrl } from '@/helpers/getPublicUrl';
 
-import { ThemeToggle } from '../ThemeToggle';
 import UserAccountNav from '../UserAccountNav';
 import { Button } from '../ui/button';
 
 export default function Header({ user }: { user?: Pick<IUser, 'name' | 'image' | 'email'> }) {
   return (
-    <header className='h-14 border-b'>
+    <header className='h-16 border-b'>
       <div className='container flex justify-between items-center h-full'>
         <div className=''>
           <Link href={getPublicUrl.main()}>
@@ -21,7 +20,6 @@ export default function Header({ user }: { user?: Pick<IUser, 'name' | 'image' |
           </Link>
         </div>
         <div className='flex gap-4 items-center'>
-          <ThemeToggle />
           {user?.email ? (
             <UserAccountNav user={user} />
           ) : (

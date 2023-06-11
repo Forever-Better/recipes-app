@@ -2,6 +2,7 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import type { NextAuthOptions } from 'next-auth';
 import EmailProvider from 'next-auth/providers/email';
 import GoogleProvider from 'next-auth/providers/google';
+import VKProvider from 'next-auth/providers/vk';
 import { Client } from 'postmark';
 
 import { siteConfig } from '@/config/site';
@@ -26,6 +27,7 @@ export const authOptions: NextAuthOptions = {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET
     }),
+    VKProvider({ clientId: env.VK_CLIENT_ID, clientSecret: env.VK_CLIENT_SECRET }),
     EmailProvider({
       from: env.SMTP_FROM,
       sendVerificationRequest: async ({ identifier, provider, url }) => {

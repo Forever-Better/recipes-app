@@ -2,19 +2,17 @@ import { NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import { withAuth } from 'next-auth/middleware';
 
-import { getPublicUrl } from '../helpers/getPublicUrl';
+import { getPublicUrl } from './helpers/getPublicUrl';
 
 export default withAuth(
   async (req) => {
     const token = await getToken({ req });
-    const isAuth = !token;
-    const isAuthPage = req.nextUrl.pathname.startsWith(
-      '/login' || req.nextUrl.pathname.startsWith(getPublicUrl.signup())
-    );
+    const isAuth = !!token;
+    const isAuthPage = req.nextUrl.pathname.startsWith('/login') || req.nextUrl.pathname.startsWith('/signup');
 
     if (isAuthPage) {
       if (isAuth) {
-        return NextResponse.redirect(new URL('/', req.url));
+        return NextResponse.redirect(new URL(getPublicUrl.main(), req.url));
       }
 
       return null;
@@ -31,8 +29,7 @@ export default withAuth(
   },
   {
     callbacks: {
-      // eslint-disable-next-line @typescript-eslint/require-await
-      async authorized() {
+      authorized() {
         // This is a work-around for handling redirect on auth pages.
         // We return true here so that the middleware function above
         // is always called.
@@ -43,5 +40,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ['/login', '/signup', '/']
+  matcher: ['/dashboard/:path*', '/editor/:path*', '/login', '/signup']
 };

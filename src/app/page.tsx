@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 
+import Layout from '@/components/layout/Layout';
 import HomeScreen from '@/components/screens/HomeScreen/HomeScreen';
+import { getCurrentUser } from '@/lib/session';
 import { RecipeService } from '@/services/recipe/recipe.service';
 
 type Props = {
@@ -14,11 +16,20 @@ export function generateMetadata({ searchParams }: Props): Metadata {
 }
 
 export default async function Home({ searchParams }: Props) {
+  const user = await getCurrentUser();
   const data = await RecipeService.prefetch(searchParams.q);
-  // await new Promise((resolve) => setTimeout(resolve, 300000));
+
   return (
-    <div className='container py-8'>
-      <HomeScreen initialRecipeList={data} searchParams={searchParams} />
-    </div>
+    <Layout
+      user={{
+        name: user?.name,
+        image: user?.image,
+        email: user?.email
+      }}
+    >
+      <div className='container py-8'>
+        <HomeScreen initialRecipeList={data} searchParams={searchParams} />
+      </div>
+    </Layout>
   );
 }

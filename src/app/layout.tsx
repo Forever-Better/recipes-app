@@ -36,23 +36,12 @@ export const metadata = {
   }
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const user = await getCurrentUser();
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html suppressHydrationWarning lang='en'>
       <body className={rubik.className}>
         <Providers>
-          <Layout
-            user={{
-              name: user?.name,
-              image: user?.image,
-              email: user?.email
-            }}
-          >
-            {' '}
-            {children}
-          </Layout>
+          {children}
           <Toaster />
         </Providers>
       </body>

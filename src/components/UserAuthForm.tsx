@@ -25,8 +25,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     handleSubmit,
     register
   } = useForm<FormData>({ resolver: zodResolver(userAuthSchema) });
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [isVKLoading, setIsVKLoading] = React.useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = React.useState(false);
   const searchParams = useSearchParams();
 
   async function onSubmit(data: FormData) {
@@ -88,17 +89,30 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           <span className='bg-background px-2 text-muted-foreground'>Or continue with</span>
         </div>
       </div>
-      <Button
-        disabled={isLoading || isGoogleLoading}
-        type='button'
-        variant='outline'
-        onClick={() => {
-          setIsGoogleLoading(true);
-          signIn('google');
-        }}
-      >
-        {isLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />} Google
-      </Button>
+      <div className='flex flex-col gap-2'>
+        <Button
+          disabled={isLoading || isVKLoading}
+          type='button'
+          variant='outline'
+          onClick={() => {
+            setIsVKLoading(true);
+            signIn('VK');
+          }}
+        >
+          {isVKLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />} VK
+        </Button>
+        <Button
+          disabled={isLoading || isGoogleLoading}
+          type='button'
+          variant='outline'
+          onClick={() => {
+            setIsGoogleLoading(true);
+            signIn('google');
+          }}
+        >
+          {isGoogleLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />} Google
+        </Button>
+      </div>
     </div>
   );
 }

@@ -14,12 +14,12 @@ interface HomeScreenProps {
 
 export default function HomeScreen({ initialRecipeList, searchParams }: HomeScreenProps) {
   return (
-    <>
+    <div className='grid gap-6'>
       <FilterBar searchParams={searchParams} />
-      <Search />
+      <Search searchParams={searchParams} />
       <Suspense fallback={<RecipeListSkeleton />}>
         <RecipeList initialData={initialRecipeList} searchParams={searchParams} />
       </Suspense>
-    </>
+    </div>
   );
 }
