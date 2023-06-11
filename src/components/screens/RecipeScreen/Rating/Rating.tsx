@@ -3,6 +3,7 @@
 import clsx from 'clsx';
 import { Star } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 
 import StarRating from '@/components/StarRating';
@@ -41,6 +42,7 @@ function RatingItem({
 
 export default function Rating({ data }: RatingProps) {
   const pathname = usePathname();
+  const session = useSession();
   const recipeId = pathname?.split(`${UrlTemplates.Recipe}/`)[1] as string;
   const [selectValue, setSelectValue] = useState(0);
   const [yourRating, setYourRating] = useState(data.userRating);
@@ -48,7 +50,7 @@ export default function Rating({ data }: RatingProps) {
   async function patchRating(rating: number) {
     setYourRating(rating);
 
-    const res = await RatingService.create(rating, recipeId);
+    await RatingService.create(rating, recipeId);
   }
   async function deleteRating() {
     await RatingService.delete(recipeId);
@@ -60,11 +62,13 @@ export default function Rating({ data }: RatingProps) {
         <CardTitle>Rating</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className='sm:flex justify-between items-start gap-2 mb-6'>
+        <div className='sm:flex justify-between items-start gap-2'>
           <StarRating
             rating={data.averageRating}
             selectValue={selectValue}
             setValue={(index) => {
+              if (!session.data?.user) return null;
+
               setSelectValue(index);
               patchRating(index);
             }}
@@ -75,7 +79,7 @@ export default function Rating({ data }: RatingProps) {
                 data.averageRating >= 7
                   ? 'text-green-600'
                   : data.averageRating === 0
-                  ? 'text-black'
+                  ? 'text-gray-700'
                   : data.averageRating <= 4
                   ? 'text-red-600'
                   : 'text-gray-500',
@@ -102,6 +106,8 @@ export default function Rating({ data }: RatingProps) {
               <button
                 className='ml-2 text-gray-400 text-sm'
                 onClick={() => {
+                  if (!session.data?.user) return null;
+
                   setSelectValue(0);
                   setYourRating(0);
                   deleteRating();

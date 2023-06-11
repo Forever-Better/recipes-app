@@ -18,7 +18,7 @@ export default async function Home({ searchParams }: Props) {
   // await new Promise((resolve) => setTimeout(resolve, 300000));
   return (
     <div className='container py-8'>
-      <HomeScreen initialRecipeList={data} />
+      <HomeScreen initialRecipeList={data} searchParams={searchParams} />
     </div>
   );
 }

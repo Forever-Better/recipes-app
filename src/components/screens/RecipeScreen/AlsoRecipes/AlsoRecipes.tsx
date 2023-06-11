@@ -5,7 +5,7 @@ import { useRef, useState } from 'react';
 import { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import Recipe from '@/components/Recipe/Recipe';
+import Recipe from '@/components/Recipe';
 import { Button } from '@/components/ui/button';
 import type { GetRecipesResponse } from '@/services/recipe/recipe.helper';
 
@@ -36,7 +36,7 @@ export default function AlsoRecipes({ data }: { data: GetRecipesResponse }) {
         slidesPerView={1}
         spaceBetween={24}
         breakpoints={{
-          400: {
+          360: {
             slidesPerView: 2
           },
           640: {

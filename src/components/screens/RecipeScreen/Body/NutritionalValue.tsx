@@ -29,7 +29,7 @@ export default function NutritionalValue({ data }: NutritionalValueProps) {
       <CardContent>
         {' '}
         <div>
-          <div className='flex gap-2'>
+          <div className='flex flex-wrap gap-2'>
             <NutrientItem placeholder='Calories' value={Math.ceil((data.calories / data.totalWeight) * 100)} />
             <NutrientItem
               placeholder='Protein'

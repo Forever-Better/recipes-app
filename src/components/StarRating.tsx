@@ -2,7 +2,10 @@
 
 import clsx from 'clsx';
 import { Star } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
+
+import { cn } from '@/lib/utils';
 
 interface StarRatingProps {
   rating: number;
@@ -11,6 +14,7 @@ interface StarRatingProps {
 }
 
 export default function StarRating({ rating, selectValue, setValue }: StarRatingProps) {
+  const session = useSession();
   const [hover, setHover] = useState(0);
 
   function getClass(type: 'hover' | 'rating' | 'selectValue') {
@@ -19,17 +23,26 @@ export default function StarRating({ rating, selectValue, setValue }: StarRating
     return 'fill-gray-800';
   }
   return (
-    <div className='flex'>
+    <div className='flex flex-wrap'>
       {[...Array(10)].map((star, index) => {
         index += 1;
         return (
           <button
             key={index}
-            className='px-0.5 first:pl-0'
+            className={cn('px-0.5 first:pl-0', { 'cursor-default': !session.data?.user })}
             type='button'
-            onClick={() => setValue(index)}
-            onMouseEnter={() => setHover(index)}
-            onMouseLeave={() => setHover(0)}
+            onClick={() => {
+              if (!session.data?.user) return null;
+              setValue(index);
+            }}
+            onMouseEnter={() => {
+              if (!session.data?.user) return null;
+              setHover(index);
+            }}
+            onMouseLeave={() => {
+              if (!session.data?.user) return null;
+              setHover(0);
+            }}
           >
             <Star
               size={28}

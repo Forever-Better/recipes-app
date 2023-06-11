@@ -4,11 +4,11 @@
 
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import Recipe from '@/components/Recipe/Recipe';
+import Recipe from '@/components/Recipe';
 import type { GetRecipesResponse } from '@/services/recipe/recipe.helper';
 import { RecipeService } from '@/services/recipe/recipe.service';
 
@@ -16,16 +16,15 @@ import RecipeListSkeleton from './RecipeListSkeleton';
 
 interface RecipeListProps {
   initialData: GetRecipesResponse;
+  searchParams: { q: string };
 }
 
-export default function RecipeList({ initialData }: RecipeListProps) {
-  const searchParams = useSearchParams();
-  const query = searchParams?.get('q') ?? 'banana';
+export default function RecipeList({ initialData, searchParams }: RecipeListProps) {
   const router = useRouter();
 
-  const { data, fetchNextPage, isFetching, isFetchingNextPage, isLoading, refetch } = useInfiniteQuery(
+  const { data, fetchNextPage, isFetching, isFetchingNextPage, isLoading, refetch, remove } = useInfiniteQuery(
     ['recipes'],
-    ({ pageParam = 1 }) => RecipeService.getAll(query, pageParam),
+    ({ pageParam = 1 }) => RecipeService.getAll(searchParams.q, pageParam),
     {
       getNextPageParam: (lastPage) => lastPage._links.next?.href,
       refetchOnWindowFocus: false,
@@ -44,22 +43,26 @@ export default function RecipeList({ initialData }: RecipeListProps) {
   }, [inView, data, fetchNextPage]);
 
   useEffect(() => {
-    if (query) {
-      router.push(`?q=${query}`);
+    if (searchParams.q) {
+      remove();
       refetch();
     }
-  }, [query, refetch, router]);
+  }, [searchParams.q, refetch, router, remove]);
 
   if (!data) return null;
 
   return (
     <>
-      <div className='text-gray-600 text-sm mb-6'>
+      <div className='text-gray-500 text-sm mb-6'>
         {data.pages[0].count >= 10000 ? `More than ${data.pages[0].count}` : data.pages[0].count} recipes
       </div>{' '}
-      <ul className='recipe-grid'>
-        {data.pages.map(({ hits }) => hits.map(({ recipe }) => <Recipe key={recipe.url} data={recipe} />))}
-      </ul>
+      {isFetching && !isFetchingNextPage ? (
+        <RecipeListSkeleton />
+      ) : (
+        <ul className='recipe-grid'>
+          {data.pages.map(({ hits }) => hits.map(({ recipe }) => <Recipe key={recipe.url} data={recipe} />))}
+        </ul>
+      )}
       {isFetchingNextPage && (
         <div className='flex justify-center my-6'>
           <Loader2 className='mr-2 h-8 w-8 animate-spin text-primary' />

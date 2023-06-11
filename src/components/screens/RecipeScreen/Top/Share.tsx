@@ -37,9 +37,12 @@ export default function Share({ data }: ShareProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className='absolute max-w-10 h-10 flex justify-center items-center right-6 top-4 rounded-full'>
+        <Button
+          className='absolute max-w-10 h-10 flex -m-3 justify-center items-center right-6 top-6 bg-accent lg:bg-transparent rounded-full'
+          variant='ghost'
+        >
           <Share2 size={22} />
-        </button>
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader />

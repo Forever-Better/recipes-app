@@ -23,7 +23,6 @@ export const RecipeService = {
     return data;
   },
   async getAll(query: string, nextUrl?: string) {
-    console.log(query, nextUrl);
     const { data } = await edamamInstance<GetRecipesResponse>({
       method: 'GET',
       params: query ? { q: query, imageSize: 'LARGE' } : { imageSize: 'LARGE' },

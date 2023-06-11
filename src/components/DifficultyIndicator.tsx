@@ -10,7 +10,7 @@ function DifficultyPoint({ active, className }: { active?: boolean; className?: 
 
 export default function DifficultyIndicator({ ingredientsLength }: { ingredientsLength: number }) {
   return (
-    <div className='flex gap-[3px] mt-2'>
+    <div className='flex gap-[3px]'>
       {[...Array(4)].map((_, i) => {
         const easy = ingredientsLength <= 5;
         const simple = ingredientsLength > 5;

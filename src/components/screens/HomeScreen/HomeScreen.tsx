@@ -3,23 +3,22 @@ import { Suspense } from 'react';
 import type { GetRecipesResponse } from '@/services/recipe/recipe.helper';
 
 import FilterBar from './FilterBar';
-import HeaderBlock from './HeaderBlock';
 import RecipeList from './RecipeList';
 import RecipeListSkeleton from './RecipeListSkeleton';
 import Search from './Search';
 
 interface HomeScreenProps {
   initialRecipeList: GetRecipesResponse;
+  searchParams: { q: string };
 }
 
-export default function HomeScreen({ initialRecipeList }: HomeScreenProps) {
+export default function HomeScreen({ initialRecipeList, searchParams }: HomeScreenProps) {
   return (
     <>
-      <HeaderBlock />
-      <FilterBar />
+      <FilterBar searchParams={searchParams} />
       <Search />
       <Suspense fallback={<RecipeListSkeleton />}>
-        <RecipeList initialData={initialRecipeList} />
+        <RecipeList initialData={initialRecipeList} searchParams={searchParams} />
       </Suspense>
     </>
   );
