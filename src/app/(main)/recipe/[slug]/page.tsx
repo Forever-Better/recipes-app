@@ -32,7 +32,7 @@ export default async function RecipePage({ params }: Props) {
   const { recipe } = await RecipeService.getOne(params.slug);
   if (!recipe) return notFound();
 
-  const hasBookmark = await db.bookmark.findFirst({ where: { userId: user?.id, recipeId: params.slug } });
+  const hasBookmark = await db.bookmark.findFirst({ where: { userId: user?.id, recipe: { originalId: params.slug } } });
   const alsoRecipes = await RecipeService.getSimilar(recipe.healthLabels[0]);
   const { reviews } = await ReviewService.getAll(params.slug);
   const rating = await getRecipeRating(params.slug);

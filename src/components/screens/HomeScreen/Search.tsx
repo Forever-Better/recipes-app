@@ -46,7 +46,7 @@ export default function Search({ searchParams }: SearchProps) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <Button className='absolute top-0 right-0' type='submit' variant='ghost'>
+        <Button className='absolute top-0 right-0 border border-l-0 rounded-l-none' type='submit' variant='ghost'>
           <SearchIcon />
         </Button>
       </div>

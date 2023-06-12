@@ -12,7 +12,7 @@ export default async function RecipePageLayout({ children }: { children: React.R
         email: user?.email
       }}
     >
-      <div className='container py-8'>{children}</div>
+      <div className='container'>{children}</div>
     </Layout>
   );
 }

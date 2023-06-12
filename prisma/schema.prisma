@@ -66,12 +66,26 @@ model VerificationToken {
   @@map(name: "verification_tokens")
 }
 
+model Recipe {
+  id         String    @id @default(cuid())
+  createdAt  DateTime  @default(now())
+  label      String
+  image      String
+  originalId String
+
+  bookmarks  Bookmark[]
+
+  @@map(name: "recipes")
+}
 model Bookmark {
   id        String    @id @default(cuid())
   createdAt DateTime  @default(now())
-  recipeId  String
+
+  recipe    Recipe     @relation(fields: [recipeId], references: [id])
+  recipeId  String 
+
   user      User     @relation(fields: [userId], references: [id])
-  userId    String
+  userId    String  
 
   @@map(name: "bookmarks")
 }

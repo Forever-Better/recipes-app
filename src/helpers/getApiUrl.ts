@@ -26,5 +26,8 @@ export const getApiUrl = {
   },
   rating(recipeId: string) {
     return `${prefix}${ApiUrlTemplates.Recipe}/${recipeId}/rating`;
+  },
+  userUpdate(userId: string) {
+    return `${prefix}${ApiUrlTemplates.User}/${userId}`;
   }
 };

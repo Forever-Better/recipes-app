@@ -6,7 +6,7 @@ import { getCurrentUser } from '@/lib/session';
 import { RecipeService } from '@/services/recipe/recipe.service';
 
 type Props = {
-  searchParams: { q: string };
+  searchParams: { q: string; diet: string; mealType: string };
 };
 
 export function generateMetadata({ searchParams }: Props): Metadata {
@@ -17,8 +17,8 @@ export function generateMetadata({ searchParams }: Props): Metadata {
 
 export default async function Home({ searchParams }: Props) {
   const user = await getCurrentUser();
-  const data = await RecipeService.prefetch(searchParams.q);
-
+  const data = await RecipeService.prefetch(searchParams);
+  console.log(searchParams);
   return (
     <Layout
       user={{
@@ -27,7 +27,7 @@ export default async function Home({ searchParams }: Props) {
         email: user?.email
       }}
     >
-      <div className='container py-8'>
+      <div className='container'>
         <HomeScreen initialRecipeList={data} searchParams={searchParams} />
       </div>
     </Layout>

@@ -6,7 +6,7 @@ export const siteConfig: SiteConfig = {
   url: 'https://fluffly-recipes.vercel.app',
   ogImage: 'https://fluffly-recipes.vercel.app/og.jpg',
   links: {
-    githubProfile: 'https://twitter.com/shadcn',
+    githubProfile: 'https://github.com/Forever-Better',
     github: 'https://github.com/Forever-Better/recipes-app'
   }
 };

@@ -75,7 +75,7 @@ export default function Top({ data, hasBookmark, rating }: TopProps) {
             </div>
           </div>
           <div className='flex gap-3 mt-6'>
-            <BookmarkButton hasBookmark={hasBookmark} recipeId={recipeId} />
+            <BookmarkButton hasBookmark={hasBookmark} recipeInfo={{ label: data.label, image: data.image, recipeId }} />
             <Button className='w-fit hidden xl:flex' variant='outline'>
               <Printer className='mr-2' size={18} />
               Print

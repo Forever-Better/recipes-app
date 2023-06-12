@@ -16,14 +16,14 @@ import RecipeListSkeleton from './RecipeListSkeleton';
 
 interface RecipeListProps {
   initialData: GetRecipesResponse;
-  searchParams: { q: string };
+  searchParams: { q: string; diet: string; mealType: string };
 }
 
 export default function RecipeList({ initialData, searchParams }: RecipeListProps) {
   const router = useRouter();
 
   const { data, fetchNextPage, isFetching, isFetchingNextPage, isLoading, isSuccess, refetch, remove } =
-    useInfiniteQuery(['recipes'], ({ pageParam = 1 }) => RecipeService.getAll(searchParams.q, pageParam), {
+    useInfiniteQuery(['recipes', searchParams], ({ pageParam = 1 }) => RecipeService.getAll(searchParams, pageParam), {
       getNextPageParam: (lastPage) => lastPage._links.next?.href,
       refetchOnWindowFocus: false,
       initialData: { pages: [initialData], pageParams: [1] }
@@ -40,11 +40,11 @@ export default function RecipeList({ initialData, searchParams }: RecipeListProp
   }, [inView, data, fetchNextPage]);
 
   useEffect(() => {
-    if (searchParams.q) {
+    if (searchParams) {
       remove();
       refetch();
     }
-  }, [searchParams.q, refetch, router, remove]);
+  }, [searchParams, refetch, router, remove]);
 
   if (!data) return null;
 

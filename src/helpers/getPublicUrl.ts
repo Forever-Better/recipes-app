@@ -15,5 +15,11 @@ export const getPublicUrl = {
   },
   recipesQuery(query: string) {
     return `${UrlTemplates.Main}?q=${query}`;
+  },
+  bookmarks() {
+    return UrlTemplates.Bookmarks;
+  },
+  settings() {
+    return UrlTemplates.Settings;
   }
 };

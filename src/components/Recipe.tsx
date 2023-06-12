@@ -14,7 +14,7 @@ export default function Recipe({ data }: { data: IRecipe }) {
           <Image
             priority
             alt='Cover'
-            className='recipe-image hover:scale-110'
+            className='recipe-image hover:scale-110 transition-all'
             height={224}
             src={data.images.LARGE?.url || data.image}
             width={224}
@@ -24,10 +24,10 @@ export default function Recipe({ data }: { data: IRecipe }) {
           <div className='mt-3 h-10 overflow-hidden'>
             <div className='text-base font-medium leading-5'>{data.label}</div>
           </div>
-          <div className='flex gap-4 lg-gap-6 mt-2 lg:mt-4'>
+          <div className='flex gap-4 lg:gap-6 mt-2 lg:mt-4'>
             <div>
-              <div className='text-sm text-gray-500'>Prep</div>
-              <div className='font-medium'>5m</div>
+              <div className='text-sm text-gray-500'>Kcal</div>
+              <div className='font-medium'>{Math.ceil((data.calories / data.totalWeight) * 100)}</div>
             </div>
             <div>
               <div className='text-sm text-gray-500'>Cook</div>

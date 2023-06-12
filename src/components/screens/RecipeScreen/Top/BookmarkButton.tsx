@@ -9,11 +9,11 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { getApiUrl } from '@/helpers/getApiUrl';
 
 interface BookmarkButtonProps {
-  recipeId: string;
   hasBookmark: boolean;
+  recipeInfo: { label: string; image: string; recipeId: string };
 }
 
-export default function BookmarkButton({ hasBookmark, recipeId }: BookmarkButtonProps) {
+export default function BookmarkButton({ hasBookmark, recipeInfo }: BookmarkButtonProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -21,18 +21,19 @@ export default function BookmarkButton({ hasBookmark, recipeId }: BookmarkButton
     setIsLoading(true);
 
     if (hasBookmark) {
-      await fetch(getApiUrl.bookmark(recipeId), {
+      await fetch(getApiUrl.bookmark(recipeInfo.recipeId), {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
         }
       });
     } else {
-      await fetch(getApiUrl.bookmark(recipeId), {
+      await fetch(getApiUrl.bookmark(recipeInfo.recipeId), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({ label: recipeInfo.label, image: recipeInfo.image, originalId: recipeInfo.recipeId })
       });
     }
 

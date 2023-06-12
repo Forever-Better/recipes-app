@@ -2,14 +2,14 @@ import { Suspense } from 'react';
 
 import type { GetRecipesResponse } from '@/services/recipe/recipe.helper';
 
-import FilterBar from './FilterBar';
+import FilterBar from './FilterBar/FilterBar';
 import RecipeList from './RecipeList';
 import RecipeListSkeleton from './RecipeListSkeleton';
 import Search from './Search';
 
 interface HomeScreenProps {
   initialRecipeList: GetRecipesResponse;
-  searchParams: { q: string };
+  searchParams: { q: string; diet: string; mealType: string };
 }
 
 export default function HomeScreen({ initialRecipeList, searchParams }: HomeScreenProps) {

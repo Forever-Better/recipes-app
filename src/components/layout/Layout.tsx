@@ -10,7 +10,7 @@ interface LayoutProps {
 
 export default function Layout({ children, user }: LayoutProps) {
   return (
-    <div className='flex space-y-6 flex-col min-h-screen'>
+    <div className='flex space-y-8 flex-col min-h-screen'>
       <Header user={user} />
       <main className='flex-1'>
         <section>{children}</section>
