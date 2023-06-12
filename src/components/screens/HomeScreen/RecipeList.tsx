@@ -52,7 +52,7 @@ export default function RecipeList({ initialData, searchParams }: RecipeListProp
     <>
       <div className='text-gray-500 text-sm mb-6'>
         {data.pages[0].count >= 10000 ? `More than ${data.pages[0].count}` : data.pages[0].count} recipes
-      </div>{' '}
+      </div>
       {isFetching && !isSuccess && !isFetchingNextPage ? (
         <RecipeListSkeleton />
       ) : (
