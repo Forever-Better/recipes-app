@@ -1,10 +1,8 @@
 import { Rubik } from 'next/font/google';
 
-import Layout from '@/components/layout/Layout';
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 import { siteConfig } from '@/config/site';
-import { getCurrentUser } from '@/lib/session';
 
 import Providers from './providers';
 

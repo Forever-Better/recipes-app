@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
-import { Icons } from './icons';
+import { Icons } from './ui/icons';
 
 type EmptyPlaceholderProps = React.HTMLAttributes<HTMLDivElement>;
 

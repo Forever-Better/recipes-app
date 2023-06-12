@@ -8,7 +8,7 @@ import { signOut } from 'next-auth/react';
 import { getPublicUrl } from '@/helpers/getPublicUrl';
 
 import { UserAvatar } from './UserAvatar';
-import { Icons } from './icons';
+import { Icons } from './ui/icons';
 import {
   DropdownMenu,
   DropdownMenuContent,

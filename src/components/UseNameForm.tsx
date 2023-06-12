@@ -9,9 +9,9 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import type * as z from 'zod';
 
-import { Icons } from '@/components/icons';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Icons } from '@/components/ui/icons';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { getApiUrl } from '@/helpers/getApiUrl';
