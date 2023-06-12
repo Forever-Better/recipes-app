@@ -1,4 +1,3 @@
-import { Bookmark } from 'lucide-react';
 import Link from 'next/link';
 
 import { EmptyPlaceholder } from '@/components/EmptyPlaceholder';
@@ -17,9 +16,8 @@ export default function BookmarkScreen({ bookmarks = [] }: { bookmarks: [] }) {
         </div>
       ) : (
         <EmptyPlaceholder>
-          <EmptyPlaceholder.Icon>
-            <Bookmark className='h-10 w-10' />
-          </EmptyPlaceholder.Icon>
+          <EmptyPlaceholder.Icon name='bookmark' />
+
           <EmptyPlaceholder.Title>No saved recipes</EmptyPlaceholder.Title>
           <EmptyPlaceholder.Description>
             You don&apos;t have any bookmarks yet. Find recipes for you.
